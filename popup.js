@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 /^[0-9]+\./, // Starts with numbers
                 /\.(jpg|jpeg|png|gif|pdf|doc|docx|txt|zip|exe|dll|json|mov|mp4|avi|mkv|xml|csv)$/i, // File extensions
                 /^(www|http|https|ftp|smtp|pop3|imap)$/i, // Common protocols
-                /(Website|API|By|Name|Tier|Safe|More|Spot|Testing|NodeJS|Excludes|activities|assistance|capabilities|issues|possible|scope|targets|terms|vulnerabilities|Engagement|Nondisclosure|This|Unique|Dashboard|date|services|VerifyIframeDiscovery|Morea)$/i, // Noise words
+                /(Website|API|By|Name|Tier|Safe|More|Spot|Testing|NodeJS|Excludes|activities|assistance|capabilities|issues|possible|scope|targets|terms|vulnerabilities|Engagement|Nondisclosure|This|Unique|Dashboard|date|services|VerifyIframeDiscovery|Morea|Eligible|Ineligible|Sketch|Targets|Bugcrowd|HackerOne|Web|Mobile|iOS|Android|Other)$/i, // Noise words
                 /^Dashboard\./, // Starts with Dashboard
                 /^assistance\./, // Starts with assistance
                 /^date\./, // Starts with date
