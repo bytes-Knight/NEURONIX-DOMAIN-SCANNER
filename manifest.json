@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Bug Bounty Domain Extractor",
+  "version": "1.0",
+  "description": "Extract wildcard and regular domains from Bugcrowd and HackerOne programs",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.bugcrowd.com/*",
+    "*://*.hackerone.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.bugcrowd.com/*",
+        "*://*.hackerone.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Domain Extractor"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
