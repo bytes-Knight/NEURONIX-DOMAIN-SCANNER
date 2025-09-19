@@ -1,0 +1,1 @@
+# Easy-Domain-and-wildcard-Extractor
