@@ -5,27 +5,37 @@
     <style>
         body {
             width: 300px;
-            padding: 20px;
+            height: auto;
+            padding: 15px; /* Reduced padding */
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-size: 14px;
             line-height: 1.4;
+            margin: 0; /* Ensure no extra margin */
         }
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Reduced margin */
             color: #2c3e50;
+        }
+        .header h3 {
+            margin: 0 0 5px; /* Tighten spacing */
+            font-size: 16px; /* Slightly smaller header */
+        }
+        .header p {
+            margin: 0;
+            font-size: 12px; /* Smaller text */
         }
         .button-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px; /* Reduced gap */
         }
         button {
-            padding: 10px 16px;
+            padding: 8px 12px; /* Reduced padding */
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px; /* Smaller font */
             font-weight: 500;
             transition: all 0.2s;
         }
@@ -51,16 +61,16 @@
             background: #e67e22;
         }
         .info-small {
-            font-size: 11px;
+            font-size: 10px; /* Smaller font */
             color: #7f8c8d;
             text-align: center;
             margin-top: 5px;
         }
         .status {
-            margin-top: 15px;
-            padding: 10px;
+            margin-top: 10px; /* Reduced margin */
+            padding: 8px; /* Reduced padding */
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 11px; /* Smaller font */
             text-align: center;
             display: none;
         }
@@ -75,25 +85,34 @@
             border: 1px solid #e74c3c;
         }
         .info {
-            font-size: 11px;
+            font-size: 10px; /* Smaller font */
             color: #7f8c8d;
-            margin-top: 10px;
+            margin-top: 8px; /* Reduced margin */
             text-align: center;
         }
         #domainPreview {
             width: 100%;
-            height: 150px;
-            margin-top: 20px;
+            height: 100px; /* Reduced height */
+            margin-top: 10px; /* Reduced margin */
             font-family: monospace;
-            font-size: 12px;
+            font-size: 11px; /* Smaller font */
             border: 1px solid #ccc;
             border-radius: 4px;
-            padding: 8px;
+            padding: 6px; /* Reduced padding */
             resize: vertical;
+            box-sizing: border-box; /* Ensure padding doesn't increase size */
         }
         #downloadBtn:disabled {
             background: #bdc3c7;
             cursor: not-allowed;
+        }
+        ul {
+            margin: 8px 0; /* Reduced margin */
+            padding-left: 20px;
+            font-size: 11px; /* Smaller font */
+        }
+        ul li {
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -116,14 +135,13 @@
     <button id="downloadBtn" class="secondary" disabled>⬇️ Download Domains</button>
     
     <div id="status" class="status"></div>
-
     <ul>
-  <li><strong>Bytes_Knight</strong> - Creator
-    <ul>
-      <li>Bugcrowd: <a href="https://bugcrowd.com/Bytes_Knight" target="_blank">@Bytes_Knight</a></li>
+        <li><strong>Bytes_Knight</strong> - Creator
+            <ul>
+                <li>Bugcrowd: <a href="https://bugcrowd.com/Bytes_Knight" target="_blank">@Bytes_Knight</a></li>
+            </ul>
+        </li>
     </ul>
-  </li>
-</ul>
 
     <div class="info">
         Works on Bugcrowd and HackerOne program pages
