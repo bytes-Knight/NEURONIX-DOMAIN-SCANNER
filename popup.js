@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const downloadBtn = document.getElementById('downloadBtn');
     const status = document.getElementById('status');
     const domainPreview = document.getElementById('domainPreview');
-    
+
     let currentDomains = [];
     let currentAction = '';
 
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         // Clean up the domain
                         domain = domain.replace(/^https?:\/\//, '');
-                        domain = domain.replace(/^www\./, '');
+                        // The next line is changed to remove the '/' at the end.
                         domain = domain.replace(/\/$/, '');
                         domain = domain.replace(/[,:;]$/, '');
                         
