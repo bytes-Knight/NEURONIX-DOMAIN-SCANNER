@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         status.textContent = message;
         status.className = `status ${type}`;
         status.style.display = 'block';
-        
+
         setTimeout(() => {
             status.style.display = 'none';
         }, 3000);
@@ -244,8 +244,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Exclude common false positives and file extensions
             const excludePatterns = [
                 /^[0-9]+\./, // Starts with numbers
-                /\.(jpg|jpeg|png|gif|pdf|doc|docx|txt|zip|exe|dll|json|mov|mp4|avi|mkv|xml|csv)$/i, // File extensions
-                /^(www|http|https|ftp|smtp|pop3|imap)$/i, // Common protocols
+                /\.(jpg|jpeg|png|gif|pdf|doc|docx|txt|zip|exe|dll|json|mov|mp4|avi|mkv|xml|csv|htm|html|css|js|php|asp|aspx|jsp|cgi|pl|py|rb|sh)$/i, // File extensions
+                /^(www|http|https|ftp|smtp|pop3|imap|Java\.NET)$/i, // Common protocols and Java.NET
                 /(Website|API|By|Name|Tier|Safe|More|Spot|Testing|NodeJS|Excludes|activities|assistance|capabilities|issues|possible|scope|targets|terms|vulnerabilities|Engagement|Nondisclosure|This|Unique|Dashboard|date|services|VerifyIframeDiscovery|Morea|Eligible|Ineligible|Sketch|Targets|Bugcrowd|HackerOne|Web|Mobile|iOS|Android|Other)$/i, // Noise words
                 /^Dashboard\./, // Starts with Dashboard
                 /^assistance\./, // Starts with assistance
