@@ -186,7 +186,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Regular domains (exact line match)
                     /^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/,
                     // Domains within text (with word boundaries)
-                    /(?:^|\s)(\*\.)?([a-zA-Z0-9][a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}(?=\s|$)/g
+                    /(?:^|\s)(\*\.)?([a-zA-Z0-9][a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}(?=\s|$)/g,
+                    // Regex to capture full URL-like domains including protocol and wildcard
+                    /(https?:\/\/)?(\*\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/g
                 ];
                 
                 // Try exact line match first
@@ -199,8 +201,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
                 
-                // Then try extracting from within the line
-                const matches = cleanLine.match(patterns[2]);
+                // Then try extracting from within the line using the new pattern
+                const matches = cleanLine.match(patterns[3]);
                 if (matches) {
                     matches.forEach(match => {
                         let domain = match.trim();
