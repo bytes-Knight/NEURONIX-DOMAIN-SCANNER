@@ -1,68 +1,116 @@
-# Easy Domain and Wildcard Extractor
+# ⚡ NEURONIX-DOMAIN-SCANNER  
 
-Easy-Domain-and-wildcard-Extractor is a browser extension designed specifically for bug bounty researchers and bug bounty platforms. It enhances the extraction of domains or wildcards from Bugcrowd and HackerOne with just a few clicks.
+**NEURONIX-DOMAIN-SCANNER** is a browser extension built for **bug bounty hunters** and **security researchers** who love speed, automation, and clean results.  
+It’s your go-to tool for extracting **domains** and **wildcards** directly from **Bugcrowd** and **HackerOne** program scopes — all in a few savage clicks.
 
-Whether you're mapping scopes, preparing reports, or organizing your recon workflow, this tool makes domain and wildcard collection fast and efficient.
+Whether you’re mapping targets, preparing scope lists, or organizing recon data — **NEURONIX-DOMAIN-SCANNER** makes domain collection fast, smart, and deadly efficient. ⚔️
 
-## Features
+---
 
-### Domain & Wildcard Extraction
-*Available on Bugcrowd and HackerOne program scope pages*
+## 🚀 Features
 
-- **Extract All Domains** - Quickly pull all domains from program scope
-- **Extract All Wildcards** - Collect all wildcard domains in one click
-- **Preview Before Download** - Review extracted domains in the built-in preview box
-- **Export Options** - Save clean domain lists as `.txt` files
-- **Wildcard Cleaner** - Remove `*.` from wildcards instantly
+### 🧠 Domain & Wildcard Extraction  
+*Fully compatible with Bugcrowd and HackerOne scope pages*
 
-### Workflow Enhancement
-- **Bugcrowd Support** - Works seamlessly on Bugcrowd scope pages
-- **HackerOne Support** - Works seamlessly on HackerOne scope pages
-- **One-Click Buttons** - Simple and fast interaction for researchers
+- **Extract All Domains** → Instantly grab every domain from scope pages.  
+- **Extract All Wildcards** → Collect all wildcard domains in a single hit.  
+- **Preview Before Download** → Review your extracted list right in the popup.  
+- **Export Options** → Save clean `.txt` files with one click.  
+- **Wildcard Cleaner** → Automatically remove `*.` from wildcards.
 
-## Screenshots
+---
 
-### Scope Extraction
+### 💼 Workflow Enhancement
+- **Bugcrowd Integration** → Works flawlessly on all Bugcrowd scope pages.  
+- **HackerOne Integration** → Works seamlessly on HackerOne programs.  
+- **One-Click Buttons** → Simple, fast, and lightweight — no extra setup needed.
 
-*Extract and preview domains directly from program scope pages*
+---
 
-<img width="695" height="683" alt="image" src="https://github.com/user-attachments/assets/842d616d-96a7-444e-b7ce-8113d29c16f4" />
+## 🖼️ Screenshots
 
-## Changelog
+### Scope Extraction in Action  
+*Extract and preview domains directly from scope pages in seconds.*
 
-### v1.0
-- Initial release.
-- Features: Extract domains, extract wildcards, preview box, download `.txt` files, remove `*.` from wildcards.
-- Supports Bugcrowd and HackerOne.
+<img width="489" height="659" alt="image" src="https://github.com/user-attachments/assets/55896045-cd4b-4c23-8cba-8f17f51a1837" />
 
-## Installation
 
-### Install Easy Domain and Wildcard Extractor
+---
 
-1. Download this repository as a ZIP file and unzip it, or clone the repository.
-2. Open your browser (Chrome/Opera/Brave) and navigate to `chrome://extensions`.
-3. Enable "Developer mode" using the toggle in the top-right corner.
-4. Click the "Load unpacked" button.
-5. Select the `Easy-Domain-and-wildcard-Extractor` directory.
+## 🧾 Changelog
 
-The extension is now installed and will be active on Bugcrowd and HackerOne program scope pages. (Refresh may be needed.)
+### v1.0  
+- Initial release  
+- Features:  
+  - Domain extraction  
+  - Wildcard extraction  
+  - Built-in preview  
+  - `.txt` download support  
+  - `*.` wildcard cleaner  
+- Full support for **Bugcrowd** and **HackerOne**
 
-## Contributors
+---
 
-- **Bytes_Knight** - Creator  
-  - Bugcrowd: [@Bytes_Knight](https://bugcrowd.com/Bytes_Knight)
+## ⚙️ Installation Guide
 
-## Contributing
+### Install NEURONIX-DOMAIN-SCANNER (Manual Method)
 
-This is an open-source project. If you have feature ideas, improvements, or bug fixes, feel free to open an issue or submit a pull request.
+1. **Download or Clone:**  
+   - Download this repository as a ZIP file and unzip it.  
+   - Or clone it via:  
+     ```bash
+     git clone https://github.com/bytes-Knight/NEURONIX-DOMAIN-SCANNER/edit/main/README.md
+     ```
 
-## Potential TODOs
+2. **Open Extensions Page:**  
+   - In Chrome, Opera, or Brave → go to:  
+     ```
+     chrome://extensions
+     ```
 
-- [ ] Add support for HackerOne
-- [ ] Add support for Bugcrowd
-- [ ] Copy/download in txt format
+3. **Enable Developer Mode:**  
+   - Toggle the **Developer mode** switch in the top-right corner.
 
-## Privacy Note
+4. **Load the Extension:**  
+   - Click **Load unpacked**  
+   - Select the `NEURONIX-DOMAIN-SCANNER` directory.
 
-- Easy-Domain-and-wildcard-Extractor only processes scope information available on Bug Bounty Platform pages. No sensitive data is collected, transmitted, or stored by the extension. The full source code is open for transparency and auditing.
-- It won't exclude out of scope, so do it manually :)
+5. **Done:**  
+   - Refresh Bugcrowd or HackerOne scope pages, and watch the magic happen. ⚡
+
+---
+
+## 👑 Contributors
+
+- **Bytes_Knight** — Creator & Maintainer  
+  🏴‍☠️ Bugcrowd: [@Bytes_Knight](https://bugcrowd.com/Bytes_Knight)
+
+---
+
+## 💡 Contributing
+
+This project is open source — contributions are welcome!  
+If you have **feature ideas**, **improvements**, or **bug fixes**, open an issue or submit a pull request.
+
+---
+
+## 🧩 Potential TODOs
+
+- [ ] Add more deep-scope extraction logic  
+- [ ] Implement dark mode UI  
+- [ ] Add auto-copy / download in `.txt` format  
+- [ ] Expand platform support beyond Bugcrowd & HackerOne  
+
+---
+
+## 🔒 Privacy Note
+
+- **NEURONIX-DOMAIN-SCANNER** only processes publicly visible scope data from bug bounty platforms.  
+- No private data is collected, stored, or transmitted — ever.  
+- 100% open source for transparency and auditing.  
+- It doesn’t exclude out-of-scope assets automatically — double-check before hunting. 🕶️  
+
+---
+
+> ⚡ *NEURONIX-DOMAIN-SCANNER — built by a hunter, for hunters.*  
+> Because manual scope scraping is for rookies.
