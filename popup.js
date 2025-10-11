@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const downloadBtn = document.getElementById('downloadBtn');
     const status = document.getElementById('status');
     const domainPreview = document.getElementById('domainPreview');
+    const wildcardCount = document.getElementById('wildcardCount');
+    const exactCount = document.getElementById('exactCount');
+    const allCount = document.getElementById('allCount');
+    const cleanCount = document.getElementById('cleanCount');
 
     let currentDomains = [];
     let currentAction = '';
@@ -14,10 +18,20 @@ document.addEventListener('DOMContentLoaded', function() {
         status.textContent = message;
         status.className = `status ${type}`;
         status.style.display = 'block';
-
         setTimeout(() => {
             status.style.display = 'none';
-        }, 3000);
+        }, 4000);
+    }
+
+    function updateCounts(counts) {
+        wildcardCount.textContent = counts.wildcards || 0;
+        wildcardCount.style.display = counts.wildcards > 0 ? 'inline-flex' : 'none';
+        exactCount.textContent = counts.exact || 0;
+        exactCount.style.display = counts.exact > 0 ? 'inline-flex' : 'none';
+        allCount.textContent = counts.all || 0;
+        allCount.style.display = counts.all > 0 ? 'inline-flex' : 'none';
+        cleanCount.textContent = counts.clean || 0;
+        cleanCount.style.display = counts.clean > 0 ? 'inline-flex' : 'none';
     }
 
     function downloadFile(content, filename) {
@@ -32,21 +46,23 @@ document.addEventListener('DOMContentLoaded', function() {
         URL.revokeObjectURL(url);
     }
 
-    function previewDomains(domains) {
+    function previewDomains(domains, counts) {
         if (domains.length === 0) {
-            domainPreview.value = 'No domains found on this page.';
+            domainPreview.value = 'No domains found. Try refreshing the page or check if you\'re on a valid program page.';
             downloadBtn.disabled = true;
+            updateCounts({});
         } else {
             domainPreview.value = domains.join('\n');
             downloadBtn.disabled = false;
-            showStatus(`Found ${domains.length} domains. Previewing results.`, 'info');
+            updateCounts(counts);
+            showStatus(`Found ${domains.length} domains. Improved filtering applied.`, 'success');
         }
     }
 
     async function executeAction(action) {
         try {
             downloadBtn.disabled = true;
-            domainPreview.value = '';
+            domainPreview.value = 'Extracting...';
 
             const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
             
@@ -64,18 +80,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = results[0].result;
             currentDomains = data.domains;
             currentAction = action;
-
-            previewDomains(currentDomains);
+            previewDomains(currentDomains, data.counts);
             
         } catch (error) {
             console.error('Error:', error);
-            showStatus('Error extracting domains. Check console for details.', 'error');
+            showStatus('Error extracting domains. Ensure page is fully loaded and try again.', 'error');
         }
     }
     
     // Event listeners
     extractWildcardsBtn.addEventListener('click', () => executeAction('wildcards'));
-    extractDomainsBtn.addEventListener('click', () => executeAction('domains'));
+    extractDomainsBtn.addEventListener('click', () => executeAction('all'));
     removeWildcardsBtn.addEventListener('click', () => executeAction('clean'));
     extractExactDomainsBtn.addEventListener('click', () => executeAction('exact'));
 
@@ -95,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let filename;
             if (currentAction === 'wildcards') {
                 filename = `${site}_wildcards_${timestamp}.txt`;
-            } else if (currentAction === 'domains') {
+            } else if (currentAction === 'all') {
                 filename = `${site}_all_domains_${timestamp}.txt`;
             } else if (currentAction === 'clean') {
                 filename = `${site}_clean_wildcards_${timestamp}.txt`;
@@ -108,199 +123,169 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // This function will be injected into the page
+    // Function to be injected - improved extraction logic
     function extractDomains(action) {
-        const domains = new Set();
+        const allDomains = new Set();
+        const wildcards = new Set();
+        const exacts = new Set();
         
-        // Determine which site we're on
+        // Determine site
         const isBugcrowd = window.location.hostname.includes('bugcrowd.com');
         const isHackerOne = window.location.hostname.includes('hackerone.com');
         
+        // More specific selectors for better accuracy
+        let selectors = [];
         if (isBugcrowd) {
-            // Bugcrowd selectors - look for scope items
-            const selectors = [
-                '[data-testid="target-groups"] [data-testid="in-scope-table"] td',
-                '.target-group .scope-table td',
-                '.bc-panel .bc-table td',
-                '.target-table td',
-                '.in-scope-table td',
-                'table td'
+            selectors = [
+                '[data-testid="target-groups"] [data-testid="in-scope-table"] td:first-child',
+                '.target-group .scope-table td:first-child',
+                '.bc-panel .bc-table .bc-table__row td:first-child',
+                '.target-table tbody tr td:first-child',
+                '.in-scope-table tbody tr td:first-child',
+                'table.in-scope td:first-child',
+                '.scope-item .domain'
             ];
-            
-            selectors.forEach(selector => {
-                document.querySelectorAll(selector).forEach(cell => {
-                    extractFromText(cell.textContent);
-                });
-            });
-            
         } else if (isHackerOne) {
-            // HackerOne selectors - look for scope items
-            const selectors = [
-                '[data-testid="policy-scopes"] td',
-                '.policy-scopes td',
-                '.structured-scope-list td',
-                '.scope-list td',
-                'table td',
-                '.spec-scope-table td'
+            selectors = [
+                '[data-testid="policy-scopes"] tbody tr td:first-child',
+                '.policy-scopes tbody tr td:first-child',
+                '.structured-scope-list tbody tr td:first-child',
+                '.scope-list tbody tr td:first-child',
+                '.spec-scope-table tbody tr td:first-child',
+                '.asset-identifier',
+                '[data-scope-type="domain"]'
             ];
-            
-            selectors.forEach(selector => {
-                document.querySelectorAll(selector).forEach(cell => {
-                    extractFromText(cell.textContent);
-                });
-            });
         }
         
-        // Generic fallback - look for domain patterns in all text
-        const allText = document.body.textContent;
-        extractFromText(allText);
+        // Extract from specific cells
+        selectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(cell => {
+                const text = cell.textContent.trim();
+                if (text) {
+                    extractAndClassify(text, allDomains, wildcards, exacts);
+                }
+            });
+        });
         
-        function extractFromText(text) {
+        // Fallback: scan body text for domains (with better line filtering)
+        const allText = document.body.innerText || document.body.textContent;
+        const lines = allText.split('\n').filter(line => {
+            const clean = line.trim();
+            return clean.length > 0 && clean.length < 200 && // Increased length limit
+                   !clean.match(/^\d{4,}/) && // Skip years or long numbers
+                   !clean.includes('.json') &&
+                   !clean.includes('.mov') &&
+                   !clean.includes('Dashboard.') &&
+                   !clean.includes('assistance.') &&
+                   !clean.includes('date.') &&
+                   !clean.includes('issues') &&
+                   !clean.includes('services');
+        });
+        
+        lines.forEach(line => extractAndClassify(line.trim(), allDomains, wildcards, exacts));
+        
+        function extractAndClassify(text, all, wild, exact) {
             if (!text) return;
             
-            // Split text into lines and process each line
-            const lines = text.split('\n');
+            // Improved patterns: more robust domain matching
+            const patterns = [
+                // Wildcard exact
+                /^\*\.([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/,
+                // Exact domain
+                /^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/,
+                // Within text with boundaries
+                /(?:^|\s|[\(\[\{])(\*\.)?([a-zA-Z0-9][a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}(?=\s|[\)\]\}]|$|[,;])/g,
+                // URL-like
+                /(https?:\/\/)?(\*\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(?:\/[^,\s]*)?/gi
+            ];
             
-            for (const line of lines) {
-                const cleanLine = line.trim();
-                if (!cleanLine) continue;
-                
-                // Skip obvious non-domain lines
-                if (cleanLine.includes('.json') || 
-                    cleanLine.includes('.mov') || 
-                    cleanLine.includes('0') ||
-                    cleanLine.match(/^\d+/) ||
-                    cleanLine.includes('Dashboard.') ||
-                    cleanLine.includes('assistance.') ||
-                    cleanLine.includes('date.') ||
-                    cleanLine.includes('issues') ||
-                    cleanLine.includes('services') ||
-                    cleanLine.length > 100) {
-                    continue;
+            // Test exact patterns first
+            if (patterns[0].test(text) || patterns[1].test(text)) {
+                if (isValidDomain(text)) {
+                    all.add(text);
+                    if (text.startsWith('*.') && patterns[0].test(text)) wild.add(text);
+                    else exact.add(text);
                 }
-                
-                // Extract domains using multiple patterns
-                const patterns = [
-                    // Wildcard domains
-                    /^\*\.([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/,
-                    // Regular domains (exact line match)
-                    /^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/,
-                    // Domains within text (with word boundaries)
-                    /(?:^|\s)(\*\.)?([a-zA-Z0-9][a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}(?=\s|$)/g,
-                    // Regex to capture full URL-like domains including protocol and wildcard
-                    /(https?:\/\/)?(\*\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/g
-                ];
-                
-                // Try exact line match first
-                for (let i = 0; i < 2; i++) {
-                    if (patterns[i].test(cleanLine)) {
-                        if (isValidDomain(cleanLine)) {
-                            domains.add(cleanLine);
-                        }
-                        break;
-                    }
-                }
-                
-                // Then try extracting from within the line using the new pattern
-                const matches = cleanLine.match(patterns[3]);
+                return;
+            }
+            
+            // Extract from within
+            patterns.slice(2).forEach(pattern => {
+                const matches = text.match(pattern);
                 if (matches) {
                     matches.forEach(match => {
-                        let domain = match.trim();
-                        
-                        // Clean up the domain
-                        domain = domain.replace(/^https?:\/\//, '');
-                        // The next line is changed to remove the '/' at the end.
-                        domain = domain.replace(/\/$/, '');
-                        domain = domain.replace(/[,:;]$/, '');
-                        
-                        if (isValidDomain(domain)) {
-                            domains.add(domain);
+                        let domain = match
+                            .replace(/^https?:\/\//i, '')
+                            .replace(/\/.*$/, '') // Remove path
+                            .replace(/[,:;()[\]{}]$/, '')
+                            .trim();
+                        if (domain && isValidDomain(domain)) {
+                            all.add(domain);
+                            if (domain.startsWith('*.') && patterns[0].test(domain)) wild.add(domain);
+                            else exact.add(domain);
                         }
                     });
                 }
-            }
+            });
         }
         
         function isValidDomain(domain) {
-            // Basic domain validation
             if (!domain || domain.length < 4 || domain.length > 253) return false;
-            
-            // Must contain at least one dot
             if (!domain.includes('.')) return false;
             
-            // Should not contain numbers at the beginning (like file names)
-            if (/^\d/.test(domain)) return false;
+            // Relaxed: allow numeric starts (e.g., 1password.com)
+            // if (/^\d/.test(domain)) return false; // REMOVED
             
-            // Should not contain consecutive numbers with dots (looks like version numbers)
-            if (/\d+\.\d+/.test(domain) && !/[a-zA-Z]/.test(domain)) return false;
-            
-            // Should not contain the digit 0 in the middle (looks like concatenated)
-            if (/[a-zA-Z]0[a-zA-Z]/.test(domain)) return false;
-            
-            // Check for valid characters (updated to be more strict)
-            const domainRegex = /^(\*\.)?[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
+            // Improved regex: allows more valid chars, handles IDN basics
+            const domainRegex = /^(\*\.)?([a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$/;
             if (!domainRegex.test(domain)) return false;
             
-            // Exclude common false positives and file extensions
+            // Fewer excludes: focus on clear false positives
             const excludePatterns = [
-                /^[0-9]+\./, // Starts with numbers
-                /\.(jpg|jpeg|png|gif|pdf|doc|docx|txt|zip|exe|dll|json|mov|mp4|avi|mkv|xml|csv|htm|html|css|js|php|asp|aspx|jsp|cgi|pl|py|rb|sh)$/i, // File extensions
-                /^(www|http|https|ftp|smtp|pop3|imap|Java\.NET)$/i, // Common protocols and Java.NET
-                /(Website|API|By|Name|Tier|Safe|More|Spot|Testing|NodeJS|Excludes|activities|assistance|capabilities|issues|possible|scope|targets|terms|vulnerabilities|Engagement|Nondisclosure|This|Unique|Dashboard|date|services|VerifyIframeDiscovery|Morea|Eligible|Ineligible|Sketch|Targets|Bugcrowd|HackerOne|Web|Mobile|iOS|Android|Other)$/i, // Noise words
-                /^Dashboard\./, // Starts with Dashboard
-                /^assistance\./, // Starts with assistance
-                /^date\./, // Starts with date
-                /^services/, // Starts with services
-                /^issues/, // Starts with issues
-                /\d{4}.*\.json$/, // Year followed by .json
-                /0[a-zA-Z]/, // Contains 0 followed by letter (concatenated domains)
-                /[a-zA-Z]0[a-zA-Z]/, // Letter-0-letter pattern (concatenated)
+                /\.(jpg|jpeg|png|gif|pdf|doc|docx|txt|zip|exe|dll|json|mov|mp4|avi|mkv|xml|csv|htm|html|css|js|php|asp|aspx|jsp|cgi|pl|py|rb|sh)$/i,
+                /^(http|https|ftp|smtp|pop3|imap|www|file)$/i,
+                /(Dashboard|assistance|date|issues|services|VerifyIframeDiscovery|Morea|Eligible|Ineligible|Sketch|Targets|Bugcrowd|HackerOne|Web|Mobile|iOS|Android|Other)$/i,
+                /\d{4,}\.json$/i
             ];
             
             for (const pattern of excludePatterns) {
                 if (pattern.test(domain)) return false;
             }
             
-            // Must have at least 2 parts after splitting by dot
             const parts = domain.replace(/^\*\./, '').split('.');
             if (parts.length < 2) return false;
             
-            // Each part should be valid
+            // Parts validation: no empty, no leading/trailing -, allow numerics
             for (const part of parts) {
-                if (!part || part.length === 0 || /^-|-$/.test(part)) return false;
-                // Parts should not be purely numeric (except for known cases)
-                if (/^\d+$/.test(part) && part !== '1') return false;
+                if (!part || part.length === 0 || /^-.*|-$/.test(part) || /^[^a-zA-Z0-9]/.test(part)) return false;
             }
             
-            // TLD should be at least 2 characters and contain only letters
+            // TLD: letters only, 2+
             const tld = parts[parts.length - 1];
             if (tld.length < 2 || !/^[a-zA-Z]+$/.test(tld)) return false;
-            
-            // Domain should have at least one alphabetic character in the main part
-            const mainDomain = parts[parts.length - 2];
-            if (!/[a-zA-Z]/.test(mainDomain)) return false;
             
             return true;
         }
         
-        let filteredDomains = Array.from(domains);
+        // Classify and filter
+        const counts = {
+            wildcards: wildcards.size,
+            exact: exacts.size,
+            all: allDomains.size,
+            clean: wildcards.size // Same as wildcards for now
+        };
         
-        // Filter and process based on action
+        let filteredDomains = Array.from(allDomains).sort();
+        
         if (action === 'wildcards') {
-            filteredDomains = filteredDomains.filter(domain => domain.startsWith('*.'));
+            filteredDomains = Array.from(wildcards).sort();
         } else if (action === 'clean') {
-            // Filter for wildcards first, then clean them
-            filteredDomains = filteredDomains
-                .filter(domain => domain.startsWith('*.'))
-                .map(domain => domain.substring(2));
+            filteredDomains = Array.from(wildcards).map(d => d.substring(2)).sort();
+            counts.clean = filteredDomains.length;
         } else if (action === 'exact') {
-            // New action: filter out wildcards
-            filteredDomains = filteredDomains.filter(domain => !domain.startsWith('*.'));
+            filteredDomains = Array.from(exacts).sort();
         }
         
-        // Remove duplicates and sort
-        filteredDomains = [...new Set(filteredDomains)].sort();
-        
-        return { domains: filteredDomains };
+        return { domains: filteredDomains, counts };
     }
 });
