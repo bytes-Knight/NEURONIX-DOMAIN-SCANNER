@@ -4,38 +4,39 @@
     <meta charset="utf-8">
     <style>
         body {
-            width: 300px;
+            width: 320px;
             height: auto;
-            padding: 15px; /* Reduced padding */
+            padding: 15px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-size: 14px;
             line-height: 1.4;
-            margin: 0; /* Ensure no extra margin */
+            margin: 0;
         }
         .header {
             text-align: center;
-            margin-bottom: 15px; /* Reduced margin */
+            margin-bottom: 15px;
             color: #2c3e50;
         }
         .header h3 {
-            margin: 0 0 5px; /* Tighten spacing */
-            font-size: 16px; /* Slightly smaller header */
+            margin: 0 0 5px;
+            font-size: 16px;
         }
         .header p {
             margin: 0;
-            font-size: 12px; /* Smaller text */
+            font-size: 12px;
         }
         .button-group {
             display: flex;
             flex-direction: column;
-            gap: 8px; /* Reduced gap */
+            gap: 8px;
+            margin-bottom: 10px;
         }
         button {
-            padding: 8px 12px; /* Reduced padding */
+            padding: 10px 14px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 12px; /* Smaller font */
+            font-size: 13px;
             font-weight: 500;
             transition: all 0.2s;
         }
@@ -61,16 +62,16 @@
             background: #e67e22;
         }
         .info-small {
-            font-size: 10px; /* Smaller font */
+            font-size: 11px;
             color: #7f8c8d;
             text-align: center;
             margin-top: 5px;
         }
         .status {
-            margin-top: 10px; /* Reduced margin */
-            padding: 8px; /* Reduced padding */
+            margin-top: 10px;
+            padding: 8px;
             border-radius: 4px;
-            font-size: 11px; /* Smaller font */
+            font-size: 12px;
             text-align: center;
             display: none;
         }
@@ -85,66 +86,78 @@
             border: 1px solid #e74c3c;
         }
         .info {
-            font-size: 10px; /* Smaller font */
+            font-size: 11px;
             color: #7f8c8d;
-            margin-top: 8px; /* Reduced margin */
+            margin-top: 8px;
             text-align: center;
         }
         #domainPreview {
             width: 100%;
-            height: 100px; /* Reduced height */
-            margin-top: 10px; /* Reduced margin */
+            height: 120px;
+            margin-top: 10px;
             font-family: monospace;
-            font-size: 11px; /* Smaller font */
+            font-size: 11px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            padding: 6px; /* Reduced padding */
+            padding: 8px;
             resize: vertical;
-            box-sizing: border-box; /* Ensure padding doesn't increase size */
+            box-sizing: border-box;
         }
         #downloadBtn:disabled {
             background: #bdc3c7;
             cursor: not-allowed;
         }
         ul {
-            margin: 8px 0; /* Reduced margin */
+            margin: 8px 0;
             padding-left: 20px;
-            font-size: 11px; /* Smaller font */
+            font-size: 11px;
         }
         ul li {
             margin-bottom: 5px;
+        }
+        .count-badge {
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            margin-left: 5px;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h3>🎯 Easy Domain and wildcard Extractor</h3>
+        <h3>🎯 Easy Domain Extractor</h3>
         <p>Extract domains from Bug Bounty programs</p>
     </div>
     
     <div class="button-group">
-        <button id="extractWildcards" class="primary">Extract Wildcard Domains</button>
-        <button id="extractExactDomainsBtn" class="primary">Extract Exact Domains</button>
-        <button id="extractDomains" class="secondary">Extract All Domains and wildcards</button>
-        <button id="removeWildcards" class="warning">Extract only Wildcards without *.domain.com</button>
+        <button id="extractWildcards" class="primary">Extract Wildcard Domains <span id="wildcardCount" class="count-badge" style="display:none;"></span></button>
+        <button id="extractExactDomainsBtn" class="primary">Extract Exact Domains <span id="exactCount" class="count-badge" style="display:none;"></span></button>
+        <button id="extractDomains" class="secondary">Extract All Domains <span id="allCount" class="count-badge" style="display:none;"></span></button>
+        <button id="removeWildcards" class="warning">Extract Clean Wildcards <span id="cleanCount" class="count-badge" style="display:none;"></span></button>
     </div>
     
-    <textarea id="domainPreview" placeholder="Extracted domains will appear here..." readonly></textarea>
-    <div class="info-small">Use the buttons above to preview results.</div>
+    <textarea id="domainPreview" placeholder="Extracted domains will appear here... Use buttons above to preview." readonly></textarea>
+    <div class="info-small">Preview shows unique, validated domains only.</div>
 
-    <button id="downloadBtn" class="secondary" disabled>⬇️ Download Domains</button>
+    <button id="downloadBtn" class="secondary" disabled>⬇️ Download as TXT</button>
     
     <div id="status" class="status"></div>
     <ul>
         <li><strong>Bytes_Knight</strong> - Creator
             <ul>
-    <li>Bugcrowd: <a href="https://bugcrowd.com/Bytes_Knight" target="_blank">@Bytes_Knight</a></li>
+                <li>Bugcrowd: <a href="https://bugcrowd.com/Bytes_Knight" target="_blank">@Bytes_Knight</a></li>
             </ul>
         </li>
     </ul>
 
     <div class="info">
-        Works on Bugcrowd and HackerOne program pages
+        Works on Bugcrowd and HackerOne program pages. Improved validation reduces false positives.
     </div>
 
     <script src="popup.js"></script>
