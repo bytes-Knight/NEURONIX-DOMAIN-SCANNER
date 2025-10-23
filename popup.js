@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             domainPreview.setAttribute('data-placeholder', 'Initiating quantum scan...');
 
             const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-            
+
             if (!tab.url.includes('bugcrowd.com') && !tab.url.includes('hackerone.com')) {
                 showStatus('Target invalid: Lock onto Bugcrowd or HackerOne vector.', 'error');
                 return;
@@ -108,13 +108,13 @@ document.addEventListener('DOMContentLoaded', function() {
             currentDomains = data.domains;
             currentAction = action;
             previewDomains(currentDomains, data.counts);
-            
+
         } catch (error) {
             console.error('Error:', error);
             showStatus('Scan disrupted: Reinitialize core.', 'error');
         }
     }
-    
+
     // Event listeners with sounds
     extractWildcardsBtn.addEventListener('click', () => {
         playSound(800, 0.15, 'sine'); // High pitch for wildcards
@@ -142,11 +142,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const content = currentDomains.join('\n');
         const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-        
+
         chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
             const tab = tabs[0];
             const site = tab.url.includes('bugcrowd.com') ? 'bugcrowd' : 'hackerone';
-            
+
             let filename;
             if (currentAction === 'wildcards') {
                 filename = `${site}_wildcards_${timestamp}.txt`;
@@ -168,11 +168,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const allDomains = new Set();
         const wildcards = new Set();
         const exacts = new Set();
-        
+
         // Determine site
         const isBugcrowd = window.location.hostname.includes('bugcrowd.com');
         const isHackerOne = window.location.hostname.includes('hackerone.com');
-        
+
         // More specific selectors for better accuracy
         let selectors = [];
         if (isBugcrowd) {
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 '[data-scope-type="domain"]'
             ];
         }
-        
+
         // Extract from specific cells
         selectors.forEach(selector => {
             document.querySelectorAll(selector).forEach(cell => {
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
-        
+
         // Fallback: scan body text for domains (with better line filtering)
         const allText = document.body.innerText || document.body.textContent;
         const lines = allText.split('\n').filter(line => {
@@ -221,12 +221,12 @@ document.addEventListener('DOMContentLoaded', function() {
                    !clean.includes('issues') &&
                    !clean.includes('services');
         });
-        
+
         lines.forEach(line => extractAndClassify(line.trim(), allDomains, wildcards, exacts));
-        
+
         function extractAndClassify(text, all, wild, exact) {
             if (!text) return;
-            
+
             // Improved patterns: more robust domain matching
             const patterns = [
                 // Wildcard exact
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // URL-like
                 /(https?:\/\/)?(\*\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(?:\/[^,\s]*)?/gi
             ];
-            
+
             // Test exact patterns first
             if (patterns[0].test(text) || patterns[1].test(text)) {
                 if (isValidDomain(text)) {
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 return;
             }
-            
+
             // Extract from within
             patterns.slice(2).forEach(pattern => {
                 const matches = text.match(pattern);
@@ -269,56 +269,56 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
-        
+
         function isValidDomain(domain) {
             domain = domain.toLowerCase();
             if (!domain || domain.length < 4 || domain.length > 253) return false;
             if (!domain.includes('.')) return false;
-            
+
             // Improved regex: allows more valid chars, handles IDN basics
             const domainRegex = /^(\*\.)?([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}(\.[a-z]{2,})?$/;
             if (!domainRegex.test(domain)) return false;
-            
+
             // Exclude CDN placeholders like hscoscdn
             if (/hscoscdn[a-z]{2}\.net/.test(domain) || /group[a-z]{2}\./.test(domain)) {
                 return false;
             }
-            
+
             // Fewer excludes: focus on clear false positives
             const excludePatterns = [
                 /\.(jpg|jpeg|png|gif|pdf|doc|docx|txt|zip|exe|dll|json|mov|mp4|avi|mkv|xml|csv|htm|html|css|js|php|asp|aspx|jsp|cgi|pl|py|rb|sh)$/i,
                 /^(http|https|ftp|smtp|pop3|imap|www|file)$/i,
-                /(dashboard|assistance|date|issues|services|verifyiframediscovery|morea|eligible|ineligible|sketch|targets|bugcrowd|hackerone|web|mobile|ios|android|other)$/i,
+                /^(dashboard|assistance|date|issues|services|verifyiframediscovery|morea|eligible|ineligible|sketch|targets|bugcrowd|hackerone|web|mobile|ios|android|other)\./i,
                 /\d{4,}\.json$/i,
                 /hscoscdn/i
             ];
-            
+
             for (const pattern of excludePatterns) {
                 if (pattern.test(domain)) return false;
             }
-            
+
             const parts = domain.replace(/^\*\./, '').split('.');
             if (parts.length < 2) return false;
-            
+
             // Parts validation: no empty, no leading/trailing -, allow numerics
             for (const part of parts) {
                 if (!part || part.length === 0 || part.startsWith('-') || part.endsWith('-') || !/^[a-z0-9]/.test(part)) return false;
             }
-            
+
             // Additional: flag parts with repeated letters at end like 'xx', 'yy' (common placeholders)
             for (const part of parts) {
                 if (/([a-z])\1{1,}$/.test(part) && part.length > 2) {
                     return false;
                 }
             }
-            
+
             // TLD: letters only, 2+
             const tld = parts[parts.length - 1];
             if (tld.length < 2 || !/^[a-z]+$/.test(tld)) return false;
-            
+
             return true;
         }
-        
+
         // Classify and filter
         const counts = {
             wildcards: wildcards.size,
@@ -326,9 +326,9 @@ document.addEventListener('DOMContentLoaded', function() {
             all: allDomains.size,
             clean: wildcards.size // Same as wildcards for now
         };
-        
+
         let filteredDomains = Array.from(allDomains).sort();
-        
+
         if (action === 'wildcards') {
             filteredDomains = Array.from(wildcards).sort();
         } else if (action === 'clean') {
@@ -337,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (action === 'exact') {
             filteredDomains = Array.from(exacts).sort();
         }
-        
+
         return { domains: filteredDomains, counts };
     }
 });
