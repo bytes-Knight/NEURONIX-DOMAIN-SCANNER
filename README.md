@@ -6,24 +6,40 @@ It’s your go-to tool for extracting **domains** and **wildcards** directly fro
 Whether you’re mapping targets, preparing scope lists, or organizing recon data — **NEURONIX-DOMAIN-SCANNER** makes domain collection fast, smart, and deadly efficient. ⚔️
 
 ---
-
 ## 🚀 Features
 
-### 🧠 Domain & Wildcard Extraction  
-*Fully compatible with Bugcrowd and HackerOne scope pages*
+### 🧠 Advanced Extraction Modes
+*Fully compatible with Bugcrowd and HackerOne scope pages.*
 
-- **Extract All Domains** → Instantly grab every domain from scope pages.  
-- **Extract All Wildcards** → Collect all wildcard domains in a single hit.  
-- **Preview Before Download** → Review your extracted list right in the popup.  
-- **Export Options** → Save clean `.txt` files with one click.  
-- **Wildcard Cleaner** → Automatically remove `*.` from wildcards.
+- **All Domains**: Extracts every potential domain from the page, including wildcards and exact domains.
+- **Wildcards Only**: Isolates and lists only wildcard domains (e.g., `*.example.com`).
+- **Exact Domains**: Extracts only specific, non-wildcard domains (e.g., `www.example.com`).
+- **Clean Wildcards**: Extracts wildcard domains and removes the `*.` prefix, leaving a clean list of root domains.
+
+### ✨ Smart Filtering & Validation
+- **Enhanced Accuracy**: Intelligently filters out common false positives like CDN placeholders, irrelevant text, and code snippets.
+- **Domain Validation**: Ensures that extracted strings are valid, well-formed domains before they are added to the list.
+
+### 💼 Streamlined Workflow
+- **Instant Preview**: See the extracted domains in the extension popup before downloading.
+- **Live Counts**: Get immediate counts for each category (All, Wildcards, Exact, Cleaned).
+- **One-Click Export**: Download your domain list as a clean `.txt` file, automatically named with the platform and timestamp.
+- **Audio Feedback**: Unique sound cues confirm your actions for a seamless experience.
+- **Platform Integration**: Works flawlessly on both Bugcrowd and HackerOne program pages.
 
 ---
 
-### 💼 Workflow Enhancement
-- **Bugcrowd Integration** → Works flawlessly on all Bugcrowd scope pages.  
-- **HackerOne Integration** → Works seamlessly on HackerOne programs.  
-- **One-Click Buttons** → Simple, fast, and lightweight — no extra setup needed.
+## 📖 How to Use
+
+1. **Navigate to a Target**: Go to any Bugcrowd or HackerOne program's scope page.
+2. **Open the Extension**: Click the **NEURONIX-DOMAIN-SCANNER** icon in your browser's toolbar.
+3. **Choose an Extraction Mode**:
+   - Click **`Extract All Domains`** for a complete list of all domains.
+   - Click **`Extract Wildcards`** to get only wildcard domains.
+   - Click **`Extract Exact Domains`** for non-wildcard domains.
+   - Click **`Clean Wildcards`** to get wildcards with the `*.` prefix removed.
+4. **Preview the Results**: The domains will appear instantly in the preview text area. Check the live counts to see a breakdown.
+5. **Download**: Click the **`Download (.txt)`** button to save the list to a file. The file will be automatically named for you.
 
 ---
 
@@ -39,44 +55,39 @@ Whether you’re mapping targets, preparing scope lists, or organizing recon dat
 
 ## 🧾 Changelog
 
+### v2.1 (Latest)
+- **Feature**: Added **Exact Domains** extraction mode.
+- **Feature**: Implemented live counts for all categories.
+- **Feature**: Added audio feedback for user actions.
+- **Improvement**: Significantly enhanced domain validation and filtering logic to reduce false positives.
+- **Improvement**: Updated UI with clearer buttons and status messages.
+- **Refactor**: Modernized the codebase for better performance and reliability.
+
 ### v1.0  
-- Initial release  
-- Features:  
-  - Domain extraction  
-  - Wildcard extraction  
-  - Built-in preview  
-  - `.txt` download support  
-  - `*.` wildcard cleaner  
+- Initial release
+- Domain and wildcard extraction
+- `.txt` download support
 - Full support for **Bugcrowd** and **HackerOne**
 
 ---
 
 ## ⚙️ Installation Guide
 
-### Install NEURONIX-DOMAIN-SCANNER (Manual Method)
+1. **Download the Extension**:
+   - Click the green **Code** button on this repository page.
+   - Select **Download ZIP** and save the file.
+   - Unzip the downloaded file.
 
-1. **Download or Clone:**  
-   - Download this repository as a ZIP file and unzip it.  
-   - Or clone it via:  
-     ```bash
-     git clone https://github.com/bytes-Knight/NEURONIX-DOMAIN-SCANNER/edit/main/README.md
-     ```
+2. **Load the Extension in Your Browser**:
+   - Open Chrome and navigate to `chrome://extensions`.
+   - Enable **Developer mode** using the toggle in the top-right corner.
+   - Click **Load unpacked**.
+   - Select the unzipped `NEURONIX-DOMAIN-SCANNER` folder.
 
-2. **Open Extensions Page:**  
-   - In Chrome, Opera, or Brave → go to:  
-     ```
-     chrome://extensions
-     ```
-
-3. **Enable Developer Mode:**  
-   - Toggle the **Developer mode** switch in the top-right corner.
-
-4. **Load the Extension:**  
-   - Click **Load unpacked**  
-   - Select the `NEURONIX-DOMAIN-SCANNER` directory.
-
-5. **Done:**  
-   - Refresh Bugcrowd or HackerOne scope pages, and watch the magic happen. ⚡
+3. **Pin the Extension**:
+   - Click the puzzle piece icon (Extensions) in your toolbar.
+   - Find **NEURONIX-DOMAIN-SCANNER** and click the pin icon next to it.
+   - Now you're ready to go! ⚡
 
 ---
 
@@ -89,8 +100,22 @@ Whether you’re mapping targets, preparing scope lists, or organizing recon dat
 
 ## 💡 Contributing
 
-This project is open source — contributions are welcome!  
-If you have **feature ideas**, **improvements**, or **bug fixes**, open an issue or submit a pull request.
+Contributions are welcome! If you have ideas for improvements, new features, or bug fixes, please follow these steps:
+
+1. **Fork the repository.**
+2. **Create a new branch** (`git checkout -b feature/your-feature-name`).
+3. **Make your changes.**
+4. **Commit your changes** (`git commit -m 'Add some feature'`).
+5. **Push to the branch** (`git push origin feature/your-feature-name`).
+6. **Open a pull request.**
+
+Alternatively, you can open an issue to discuss your ideas or report a bug.
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
