@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Target - Bugcrowd Style</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #111;
+            color: #eee;
+        }
+
+        .target-group {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #333;
+        }
+
+        .scope-table td {
+            padding: 10px;
+            border-bottom: 1px solid #444;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="target-group">
+        <h3>In Scope</h3>
+        <table class="scope-table" data-testid="in-scope-table">
+            <tbody>
+                <tr>
+                    <td>*.thuisbezorgd.nl</td>
+                    <td>Website Testing</td>
+                </tr>
+                <tr>
+                    <td>*.menulog.com.au</td>
+                    <td>Website Testing</td>
+                </tr>
+                <tr>
+                    <td>*.takeaway.com</td>
+                    <td>Website Testing</td>
+                </tr>
+                <tr>
+                    <td>plain-domain.com</td>
+                    <td>Website Testing</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="nested">
+                            <span>api.complex-structure.io</span>
+                        </div>
+                    </td>
+                    <td>API</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="other-section">
+        <p>Some random text mentioning test.com and example.org in a paragraph.</p>
+    </div>
+
+</body>
+
+</html>

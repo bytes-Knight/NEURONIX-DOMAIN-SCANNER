@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Neuronix Domain Scanner",
+  "version": "2.1",
+  "description": "Futuristic domain extractor for Bugcrowd and HackerOne - Enhanced filtering for placeholders and CDNs",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.bugcrowd.com/engagements/*",
+    "*://*.hackerone.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.bugcrowd.com/engagements/*",
+        "*://*.hackerone.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Neuronix Scanner",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

@@ -1,0 +1,172 @@
+/* Futuristic Styles for Neuronix Domain Scanner - Cyberpunk Neon Vibes */
+
+:root {
+    --neon-cyan: #00ffff;
+    --neon-magenta: #ff00ff;
+    --bg-dark: #000011;
+    --glass-dark: rgba(0, 0, 17, 0.7);
+    --glow-cyan: 0 0 15px var(--neon-cyan);
+    --glow-magenta: 0 0 15px var(--neon-magenta);
+    --highlight-surface: rgba(255, 255, 255, 0.18);
+    --highlight-surface-strong: rgba(124, 244, 255, 0.18);
+    --highlight-border: rgba(124, 244, 255, 0.85);
+    --highlight-text: #0e1827;
+    --highlight-glow: 0 0 18px rgba(124, 244, 255, 0.55);
+}
+
+#domain-extractor-fab {
+    font-family: 'Orbitron', monospace !important;
+    box-shadow: var(--glow-cyan), inset 0 0 20px rgba(0,255,255,0.1);
+}
+
+/* Neon highlight for extracted domains */
+.domain-extractor-highlight {
+    background: transparent !important;
+    border: 1px solid var(--highlight-border) !important;
+    background-clip: padding-box !important;
+    border-radius: 6px !important;
+    padding: 2px 6px !important;
+    margin: 1px !important;
+    color: inherit !important;
+    text-shadow: 0 0 6px rgba(255,255,255,0.25);
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 12px rgba(124, 244, 255, 0.55), 0 0 6px rgba(255,255,255,0.1);
+}
+
+.domain-extractor-highlight::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border: 1px solid rgba(124, 244, 255, 0.45);
+    filter: blur(4px);
+    opacity: 0.8;
+    border-radius: 8px;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+    pointer-events: none;
+}
+
+.domain-extractor-highlight:hover::before {
+    transform: scale(1.06);
+    opacity: 1;
+}
+
+.domain-extractor-highlight:hover {
+    box-shadow: 0 0 15px rgba(124, 244, 255, 0.65), var(--glow-magenta), 0 0 20px rgba(255,255,255,0.2) !important;
+    transform: scale(1.03);
+}
+
+/* Cyberpunk tooltip */
+.domain-extractor-tooltip {
+    position: absolute;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(0, 12, 32, 0.9));
+    color: #e8f7ff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-family: 'Orbitron', monospace;
+    z-index: 10001;
+    box-shadow: var(--glow-cyan), 0 8px 32px rgba(0,0,0,0.5);
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.4s ease;
+    border: 1px solid var(--highlight-border);
+    max-width: 220px;
+}
+
+.domain-extractor-tooltip.show {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.02);
+}
+
+.domain-extractor-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: var(--neon-cyan) transparent transparent transparent;
+}
+
+/* Holographic animation for found domains */
+.domain-found {
+    animation: holographicScan 1s ease-out;
+}
+
+@keyframes holographicScan {
+    0% { 
+        opacity: 0.5;
+        transform: scale(0.95) rotateX(10deg);
+        filter: hue-rotate(0deg);
+    }
+    50% { 
+        opacity: 1;
+        transform: scale(1.1) rotateX(-10deg);
+        filter: hue-rotate(180deg);
+        box-shadow: var(--glow-magenta);
+    }
+    100% { 
+        opacity: 1;
+        transform: scale(1) rotateX(0deg);
+        filter: hue-rotate(360deg);
+        box-shadow: var(--glow-cyan);
+    }
+}
+
+/* Enhanced status indicator - Hologram style */
+.domain-extractor-status {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    background: linear-gradient(135deg, rgba(0,255,255,0.2), rgba(255,0,255,0.2));
+    color: var(--neon-cyan);
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-family: 'Orbitron', monospace;
+    z-index: 10002;
+    box-shadow: var(--glow-cyan), var(--glow-magenta), 0 10px 40px rgba(0,0,0,0.6);
+    transform: translateX(100%) rotateY(90deg);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 1px solid var(--neon-cyan);
+    backdrop-filter: blur(15px);
+}
+
+.domain-extractor-status.show {
+    transform: translateX(0) rotateY(0deg);
+}
+
+.domain-extractor-status.error {
+    background: linear-gradient(135deg, rgba(255,0,0,0.2), rgba(255,165,0,0.2));
+    color: #ff6b6b;
+    box-shadow: 0 0 20px rgba(255,0,0,0.4), 0 0 30px rgba(255,165,0,0.3);
+    border-color: #ff0000;
+}
+
+/* Responsive for mobile-ish views */
+@media (max-width: 768px) {
+    #domain-extractor-fab {
+        bottom: 20px !important;
+        right: 20px !important;
+        width: 55px !important;
+        height: 55px !important;
+        font-size: 22px !important;
+    }
+    
+    .domain-extractor-status {
+        top: 20px !important;
+        right: 20px !important;
+        font-size: 12px !important;
+        padding: 12px 16px !important;
+    }
+    
+    .domain-extractor-tooltip {
+        max-width: 180px;
+        font-size: 10px;
+        padding: 10px 12px;
+    }
+}

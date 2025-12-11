@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuronix Domain Scanner</title>
+    <link rel="stylesheet" href="popup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="shell">
+        <header class="hero">
+            <div class="hero__badge">v2.1</div>
+            <div class="hero__copy">
+                <p class="eyebrow">Neuronix Recon Suite</p>
+                <h1>Domain Scanner</h1>
+                <p class="sub">Sharper pulls for Bugcrowd &amp; HackerOne targets.</p>
+            </div>
+        </header>
+
+        <section class="controls">
+            <div class="control-row">
+                <button id="extractWildcards" class="pill-btn pill-btn--primary">
+                    Wildcard Scan
+                    <span id="wildcardCount" class="count-badge" style="display:none;"></span>
+                </button>
+                <button id="extractExactDomainsBtn" class="pill-btn pill-btn--primary">
+                    Exact Probe
+                    <span id="exactCount" class="count-badge" style="display:none;"></span>
+                </button>
+            </div>
+            <div class="control-row">
+                <button id="extractDomains" class="pill-btn pill-btn--ghost">
+                    Full Sweep
+                    <span id="allCount" class="count-badge" style="display:none;"></span>
+                </button>
+                <button id="removeWildcards" class="pill-btn pill-btn--warn">
+                    Clean Purge
+                    <span id="cleanCount" class="count-badge" style="display:none;"></span>
+                </button>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel__header">
+                <div>
+                    <p class="panel__eyebrow">Captured assets</p>
+                    <h3 class="panel__title">Live buffer</h3>
+                </div>
+                <div class="chip-row">
+                    <span class="chip">Wildcards: <strong id="wildcardCountChip">0</strong></span>
+                    <span class="chip">Exact: <strong id="exactCountChip">0</strong></span>
+                    <span class="chip">All: <strong id="allCountChip">0</strong></span>
+                    <span class="chip">Clean: <strong id="cleanCountChip">0</strong></span>
+                </div>
+            </div>
+            <div class="preview-area" id="domainPreview" data-placeholder="Ready. Launch a scan to populate the buffer."></div>
+        </section>
+
+        <button id="downloadBtn" class="action-btn" disabled>⇩ Quantum Download</button>
+
+        <div id="status" class="status"></div>
+
+        <footer class="footer">
+            <p>Built by <a href="https://bugcrowd.com/Bytes_Knight" target="_blank">@Bytes_Knight</a> · 2047</p>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
